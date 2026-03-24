@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  backend:
+    build: .
+    ports:
+      - "8080:8080"
+      - "80:80"
+    environment:
+      MONGODB_URL: mongodb://mongo:27017/appdb
+    depends_on:
+      - mongo
+    volumes:
+      - .:/app
+      - /app/.venv 
+
+  mongo:
+    image: mongo:7
+    container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: appdb
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
